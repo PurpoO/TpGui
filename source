@@ -85,7 +85,7 @@ ConstantlyTeleport.TextWrapped = true
 
 -- Scripts:
 
-local function PETRWLK_fake_script() -- Frame.Draggable 
+local function RRSWYX_fake_script() -- Frame.Draggable 
 	local script = Instance.new('LocalScript', Frame)
 
 	local UIS = game:GetService('UserInputService')
@@ -123,8 +123,8 @@ local function PETRWLK_fake_script() -- Frame.Draggable
 		end
 	end)
 end
-coroutine.wrap(PETRWLK_fake_script)()
-local function UXIAMQ_fake_script() -- Teleport.TeleportScript 
+coroutine.wrap(RRSWYX_fake_script)()
+local function SFJAVZK_fake_script() -- Teleport.TeleportScript 
 	local script = Instance.new('LocalScript', Teleport)
 
 	local Username = script.Parent.Parent.Username
@@ -133,8 +133,9 @@ local function UXIAMQ_fake_script() -- Teleport.TeleportScript
 		local Char = game.Players.LocalPlayer.Character
 		
 		local Target = game.Workspace:WaitForChild(Username.Text)
+		local DisplayTarget = game.Players:WaitForChild(Username.Text)
 		
-		if Target.Name == Username.Text then
+		if Target.Name == Username.Text or DisplayTarget.DisplayName == Username.Text then
 			Char.HumanoidRootPart.CFrame = Target.Head.CFrame + Vector3.new(0, 8, 0)
 		else
 			script.Parent.Text = "User not found!"
@@ -143,8 +144,8 @@ local function UXIAMQ_fake_script() -- Teleport.TeleportScript
 		end
 	end)
 end
-coroutine.wrap(UXIAMQ_fake_script)()
-local function IIPY_fake_script() -- ConstantlyTeleport.ConstantlyScript 
+coroutine.wrap(SFJAVZK_fake_script)()
+local function AOGYK_fake_script() -- ConstantlyTeleport.ConstantlyScript 
 	local script = Instance.new('LocalScript', ConstantlyTeleport)
 
 	local Username = script.Parent.Parent.Username
@@ -153,6 +154,7 @@ local function IIPY_fake_script() -- ConstantlyTeleport.ConstantlyScript
 		local Char = game.Players.LocalPlayer.Character
 		
 		local Target = game.Workspace:WaitForChild(Username.Text)
+		local DisplayTarget = game.Players:WaitForChild(Username.Text)
 		
 		if AcikMi == false then
 			AcikMi = true
@@ -160,7 +162,9 @@ local function IIPY_fake_script() -- ConstantlyTeleport.ConstantlyScript
 			while true do
 				wait(0.1)
 				if AcikMi == true then
-					Char.HumanoidRootPart.CFrame = Target.Head.CFrame + Vector3.new(0, 8, 0)
+					if Target.Name == Username.Text or DisplayTarget.DisplayName == Username.Text then
+						Char.HumanoidRootPart.CFrame = Target.Head.CFrame + Vector3.new(0, 8, 0)
+					end
 				end
 			end
 		else
@@ -170,4 +174,4 @@ local function IIPY_fake_script() -- ConstantlyTeleport.ConstantlyScript
 		
 	end)
 end
-coroutine.wrap(IIPY_fake_script)()
+coroutine.wrap(AOGYK_fake_script)()

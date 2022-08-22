@@ -1,0 +1,173 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local TPGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TPGuiText = Instance.new("TextLabel")
+local Nothing = Instance.new("Frame")
+local Username = Instance.new("TextBox")
+local Teleport = Instance.new("TextButton")
+local ConstantlyTeleport = Instance.new("TextButton")
+
+--Properties:
+
+TPGui.Name = "TPGui"
+TPGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+TPGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+TPGui.ResetOnSpawn = false
+
+Frame.Parent = TPGui
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.Position = UDim2.new(0.086503379, 0, 0.36329934, 0)
+Frame.Size = UDim2.new(0, 236, 0, 108)
+
+TPGuiText.Name = "TPGuiText"
+TPGuiText.Parent = Frame
+TPGuiText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TPGuiText.BackgroundTransparency = 1.000
+TPGuiText.Size = UDim2.new(0, 236, 0, 27)
+TPGuiText.ZIndex = 2
+TPGuiText.Font = Enum.Font.SciFi
+TPGuiText.Text = "TP Gui"
+TPGuiText.TextColor3 = Color3.fromRGB(255, 255, 255)
+TPGuiText.TextScaled = true
+TPGuiText.TextSize = 14.000
+TPGuiText.TextWrapped = true
+
+Nothing.Name = "Nothing"
+Nothing.Parent = Frame
+Nothing.BackgroundColor3 = Color3.fromRGB(255, 0, 4)
+Nothing.Position = UDim2.new(0, 0, 0.25, 0)
+Nothing.Size = UDim2.new(0, 236, 0, 6)
+Nothing.ZIndex = 2
+
+Username.Name = "Username"
+Username.Parent = Frame
+Username.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Username.BorderSizePixel = 5
+Username.Position = UDim2.new(0.0254237279, 0, 0.481481493, 0)
+Username.Size = UDim2.new(0, 106, 0, 32)
+Username.ZIndex = 2
+Username.Font = Enum.Font.SciFi
+Username.Text = "Username"
+Username.TextColor3 = Color3.fromRGB(255, 255, 255)
+Username.TextSize = 14.000
+Username.TextWrapped = true
+
+Teleport.Name = "Teleport"
+Teleport.Parent = Frame
+Teleport.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Teleport.BorderSizePixel = 5
+Teleport.Position = UDim2.new(0.601694942, 0, 0.361111104, 0)
+Teleport.Size = UDim2.new(0, 88, 0, 26)
+Teleport.ZIndex = 2
+Teleport.Font = Enum.Font.SciFi
+Teleport.Text = "Teleport"
+Teleport.TextColor3 = Color3.fromRGB(255, 255, 255)
+Teleport.TextSize = 14.000
+Teleport.TextWrapped = true
+
+ConstantlyTeleport.Name = "ConstantlyTeleport"
+ConstantlyTeleport.Parent = Frame
+ConstantlyTeleport.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ConstantlyTeleport.BorderSizePixel = 5
+ConstantlyTeleport.Position = UDim2.new(0.601694942, 0, 0.703703701, 0)
+ConstantlyTeleport.Size = UDim2.new(0, 88, 0, 26)
+ConstantlyTeleport.ZIndex = 2
+ConstantlyTeleport.Font = Enum.Font.SciFi
+ConstantlyTeleport.Text = "Constantly Teleport: OFF"
+ConstantlyTeleport.TextColor3 = Color3.fromRGB(255, 255, 255)
+ConstantlyTeleport.TextScaled = true
+ConstantlyTeleport.TextSize = 14.000
+ConstantlyTeleport.TextWrapped = true
+
+-- Scripts:
+
+local function PETRWLK_fake_script() -- Frame.Draggable 
+	local script = Instance.new('LocalScript', Frame)
+
+	local UIS = game:GetService('UserInputService')
+	local frame = script.Parent
+	local dragToggle = nil
+	local dragSpeed = 0.25
+	local dragStart = nil
+	local startPos = nil
+	
+	local function updateInput(input)
+		local delta = input.Position - dragStart
+		local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+			startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = position}):Play()
+	end
+	
+	frame.InputBegan:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+			dragToggle = true
+			dragStart = input.Position
+			startPos = frame.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragToggle = false
+				end
+			end)
+		end
+	end)
+	
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			if dragToggle then
+				updateInput(input)
+			end
+		end
+	end)
+end
+coroutine.wrap(PETRWLK_fake_script)()
+local function UXIAMQ_fake_script() -- Teleport.TeleportScript 
+	local script = Instance.new('LocalScript', Teleport)
+
+	local Username = script.Parent.Parent.Username
+	
+	script.Parent.MouseButton1Click:Connect(function()
+		local Char = game.Players.LocalPlayer.Character
+		
+		local Target = game.Workspace:WaitForChild(Username.Text)
+		
+		if Target.Name == Username.Text then
+			Char.HumanoidRootPart.CFrame = Target.Head.CFrame + Vector3.new(0, 8, 0)
+		else
+			script.Parent.Text = "User not found!"
+			wait(4)
+			script.Parent.Text = "Username"
+		end
+	end)
+end
+coroutine.wrap(UXIAMQ_fake_script)()
+local function IIPY_fake_script() -- ConstantlyTeleport.ConstantlyScript 
+	local script = Instance.new('LocalScript', ConstantlyTeleport)
+
+	local Username = script.Parent.Parent.Username
+	local AcikMi = false
+	script.Parent.MouseButton1Click:Connect(function()
+		local Char = game.Players.LocalPlayer.Character
+		
+		local Target = game.Workspace:WaitForChild(Username.Text)
+		
+		if AcikMi == false then
+			AcikMi = true
+			script.Parent.Text = "Constantly Teleport: ON"
+			while true do
+				wait(0.1)
+				if AcikMi == true then
+					Char.HumanoidRootPart.CFrame = Target.Head.CFrame + Vector3.new(0, 8, 0)
+				end
+			end
+		else
+			script.Parent.Text = "Constantly Teleport: OFF"
+			AcikMi = false
+		end
+		
+	end)
+end
+coroutine.wrap(IIPY_fake_script)()
